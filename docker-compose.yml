@@ -1,0 +1,23 @@
+services:
+  nginx-proxy-manager:
+    image: 'jc21/nginx-proxy-manager:latest'
+    container_name: nginx-proxy-manager
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+      - '81:81'
+    volumes:
+      - /home/docker/nginx-proxy-manager/data:/data
+      - /home/docker/nginx-proxy-manager/letsencrypt:/etc/letsencrypt
+  uptime-kuma:
+    image: louislam/uptime-kuma:latest
+    container_name: uptime-kuma
+    restart: always
+    ports:
+      - "3001:3001"
+    volumes:
+      - /home/docker/uptime-kuma/data:/app/data
+    environment:
+      - TZ=Australia/Perth
+      - UMASK=0022 
