@@ -5,8 +5,8 @@ FILE_URL="https://raw.githubusercontent.com/shuaXII/homelab/refs/heads/main/temp
 
 TARGET_FILE="/usr/local/bin/template-ubuntu.sh"
 
-apt-get update -qq
-apt-get install -y -qq curl
+sudo apt update -qq
+sudo apt install -y -qq curl
 
 curl -fsSL "$FILE_URL" -o "$TARGET_FILE"
 
