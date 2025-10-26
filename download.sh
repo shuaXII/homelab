@@ -5,7 +5,7 @@ set -e
 FILE_URL="https://raw.githubusercontent.com/shuaXII/homelab/refs/heads/main/template-ubuntu.sh"
 
 # Target path on your system
-TARGET_FILE="/usr/local/bin/template-setup.sh"
+TARGET_FILE="/usr/local/bin/template-ubuntu.sh"
 
 # Ensure dependencies
 apt-get update -qq
