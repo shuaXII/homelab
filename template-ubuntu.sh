@@ -110,8 +110,6 @@ echo "=== Configuration Complete ==="
 echo "Hostname: $NEW_HOSTNAME"
 echo "Static IP: $NEW_IP"
 
-systemctl disable template-setup.service
-
 echo "Rebooting in 10 seconds..."
 for i in {10..1}; do
     echo "$i..."
