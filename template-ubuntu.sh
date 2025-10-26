@@ -53,19 +53,19 @@ cp "$NETPLAN_FILE" "$BACKUP_FILE"
 hostnamectl set-hostname "$NEW_HOSTNAME"
 grep -q "127.0.1.1" /etc/hosts && sed -i "s/^127\.0\.1\.1.*/127.0.1.1 $NEW_HOSTNAME/" /etc/hosts || echo "127.0.1.1 $NEW_HOSTNAME" >> /etc/hosts
 
-cat <<EOF > "$NETPLAN_FILE"
+cat > "$NETPLAN_FILE" <<EOL
 network:
   version: 2
   renderer: networkd
   ethernets:
-    $INTERFACE:
+    ${INTERFACE}:
       dhcp4: no
       addresses:
-        - $NEW_IP
-      gateway4: $GATEWAY
+        - ${NEW_IP}
+      gateway4: ${GATEWAY}
       nameservers:
-        addresses: [${DNS//,/ }]
-EOF
+        addresses: [$(echo "$DNS" | sed 's/,/, /g')]
+EOL
 
 netplan apply
 
@@ -104,6 +104,8 @@ else
     cat /tmp/gh_response.json | jq
 fi
 unset GITHUB_TOKEN
+
+sed -i 's/^#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
 
 echo "Done! SSH key saved at: $KEY_FILE"
 echo "=== Configuration Complete ==="
