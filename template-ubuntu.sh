@@ -23,7 +23,8 @@ sudo apt-get update
 
 echo "Updating and installing dependencies..."
 apt-get update -y -qq
-apt-get install -y -qq openssh-client git jq qemu-guest-agent docker-ce
+apt-get install -y -qq openssh-client git jq qemu-guest-agent
+sudo apt-get install -y -qq docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 echo "Dependencies installed."
 
