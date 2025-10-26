@@ -8,8 +8,13 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
+echo "Adding Docker GPG key and repository..."
+install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+chmod a+r /etc/apt/keyrings/docker.asc
+
 echo "Updating and installing dependencies..."
-apt-get update -qq
+apt-get update -y -qq
 apt-get install -y -qq curl openssh-client git jq ca-certificates qemu-guest-agent docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 echo "Dependencies installed."
@@ -18,18 +23,12 @@ echo "Installing and configuring QEMU Guest Agent..."
 systemctl start qemu-guest-agent
 ln -sf /usr/lib/systemd/system/qemu-guest-agent.service /etc/systemd/system/multi-user.target.wants/qemu-guest-agent.service
 
-echo "Adding Docker GPG key and repository..."
-install -m 0755 -d /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-chmod a+r /etc/apt/keyrings/docker.asc
-
 ARCH=$(dpkg --print-architecture)
 UBUNTU_CODENAME=${UBUNTU_CODENAME:-$(. /etc/os-release && echo "$VERSION_CODENAME")}
 echo "deb [arch=$ARCH signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $UBUNTU_CODENAME stable" \
     | tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 echo "Updating repositories and upgrading packages..." 
-apt-get update -y -qq
 apt-get upgrade -y -qq
 
 echo "Deploying Docker and Portainer..."
